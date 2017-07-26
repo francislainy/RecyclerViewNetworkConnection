@@ -29,26 +29,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new FishTask().execute("http://localhost/json/json_sample_app.json");
-
-
-//        for (int i=0; i<20; i++) {
-//            fishes.add(new Fish("My Fish"));
-//        }
-//
-//        mFishAdapter = new FishAdapter(this, fishes);
-//        recyclerView.setAdapter(mFishAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        new FishTask().execute();
     }
 
-    private class FishTask extends AsyncTask<String, Void, String> {
+    private class FishTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Void doInBackground(Void... params) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder().url("http://192.168.0.100/json/json_sample_app.json").build();
-            String fish_name = "mytestfish";
+            String fish_name = null;
             Response response = null;
             try {
                 response = client.newCall(request).execute();
@@ -70,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 //                        "{\"fish_img\":\"14.jpg\",\"fish_name\":\"Silver Croaker\",\"cat_name\":\"Marine Fish\",\"size_name\":\"Small\",\"price\":\"220\"}]");
 
                 // Extract data from json and store into ArrayList as class objects
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                     fish_name = jsonObject.getString("fish_name");
@@ -87,12 +77,12 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return fish_name;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             linearLayoutManager = new LinearLayoutManager(MainActivity.this);
