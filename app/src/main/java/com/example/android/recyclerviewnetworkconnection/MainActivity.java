@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             Response response = null;
             try {
                 response = client.newCall(request).execute();
-
+                fishes = new ArrayList<>();
                 JSONArray jsonArray = new JSONArray(response.body().string());
 //                JSONArray jsonArray = new JSONArray("[{\"fish_img\":\"1.jpg\",\"fish_name\":\"Indian Mackerel\",\"cat_name\":\"Marine Fish\",\"size_name\":\"Medium\",\"price\":\"100\"},\n" +
 //                        "{\"fish_img\":\"2.jpg\",\"fish_name\":\"Manthal Repti\",\"cat_name\":\"Marine Fish\",\"size_name\":\"Small\",\"price\":\"200\"},\n" +
@@ -72,13 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
                 // Extract data from json and store into ArrayList as class objects
                 for (int i = 0; i < 10; i++) {
-
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                     fish_name = jsonObject.getString("fish_name");
                     Fish fish = new Fish(fish_name);
-//                    fishes.add(fish);
-//                    Log.e("tag", jsonObject.getString("fish_name"));
+
+                    fishes.add(fish);
                 }
 
             } catch (JSONException e) {
@@ -96,12 +94,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
-
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            fishes = new ArrayList<>();
-            fishes.add(new Fish(result));
-
             linearLayoutManager = new LinearLayoutManager(MainActivity.this);
 
             recyclerView.setLayoutManager(linearLayoutManager);
